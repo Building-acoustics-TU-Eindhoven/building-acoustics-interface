@@ -1,0 +1,18 @@
+# YAML 1.2
+---
+cff-version: "1.2.0"
+title: "building_acoustics_interface"
+authors:
+  -
+    family-names: Rosendaal
+    given-names: Thomas
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+date-released: 20??-MM-DD
+doi: <insert your DOI here>
+version: "0.0.1"
+repository-code: "https://github.com/building-acoustics/building-acoustics-interface"
+keywords:
+  - room-acoustics
+  - interface
+message: "If you use this software, please cite it using these metadata."
+license: GPL-3.0-or-later
