@@ -1,3 +1,4 @@
+from object_3d import *
 import pygame as pg
 
 class SoftwareRender:
@@ -8,6 +9,10 @@ class SoftwareRender:
         self.FPS = 60
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
+        self.create_objects()
+
+    def create_objects(self):
+        self.objects = Object3D(self)
 
     def draw(self):
         self.screen.fill(pg.Color('white'))
