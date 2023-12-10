@@ -17,7 +17,7 @@ class Projection:
         self.projection_matrix = np.array([
             [m00, 0, 0, 0],
             [0, m11, 0, 0],
-            [0, 0, m22, 0],
+            [0, 0, m22, 1],
             [0, 0, m32, 0]
         ])
 
