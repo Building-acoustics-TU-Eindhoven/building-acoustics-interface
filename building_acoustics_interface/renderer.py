@@ -27,6 +27,7 @@ class SoftwareRender:
     def run(self):
         while True:
             self.draw()
+            self.camera.control()
             [exit() for i in pg.event.get() if i.type == pg.QUIT]
             pg.display.set_caption(str(self.clock.get_fps()))
             pg.display.flip()
