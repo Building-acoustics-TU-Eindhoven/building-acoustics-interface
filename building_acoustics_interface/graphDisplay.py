@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import *
 import numpy as np
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -10,15 +10,15 @@ class graphDisplay:
     def __init__(self, root):
         screenWidth = root.winfo_screenwidth()
         width = 7
-        height = 5
+        height = 4
         fig = getFig(width, height)
-        
-        frame = tk.Frame(root)
+            
+        frame = LabelFrame(root, text="Graph results")
         frame.place(x=screenWidth - width * 100, y=0)
        
         canvas = FigureCanvasTkAgg(fig, master=frame)  # A tk.DrawingArea.
         canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
 
 
 def getFig(width, height):
