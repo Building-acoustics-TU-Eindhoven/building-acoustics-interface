@@ -1,5 +1,6 @@
 from tkinter import *
 from toolbar import *
+from graphDisplay import *
 
 # root window
 root = Tk()
@@ -8,5 +9,7 @@ screenHeight = root.winfo_screenheight()
 screenWidth = root.winfo_screenwidth()
 root.geometry("{}x{}+0+0".format(screenWidth, screenHeight))
 root.state('zoomed')
+root.resizable(False, False)
 toolbar = Toolbar(root)
+graph_display = graphDisplay(root)
 root.mainloop()
