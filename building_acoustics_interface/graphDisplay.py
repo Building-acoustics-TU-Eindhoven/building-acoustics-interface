@@ -6,11 +6,11 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
 
-class graphDisplay():
+class graphDisplay:
     def __init__(self, root):
         screenWidth = root.winfo_screenwidth()
         width = 7
-        height = 4
+        height = 5
         fig = getFig(width, height)
         
         frame = tk.Frame(root)

@@ -1,6 +1,7 @@
 from tkinter import *
 from toolbar import *
 from graphDisplay import *
+from resultsDisplay import *
 
 # root window
 root = Tk()
@@ -12,4 +13,5 @@ root.state('zoomed')
 root.resizable(False, False)
 toolbar = Toolbar(root)
 graph_display = graphDisplay(root)
+results_display = resultsDisplay(root)
 root.mainloop()
