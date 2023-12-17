@@ -1,6 +1,6 @@
 """Tests for the building_acoustics_interface.my_module module."""
 import pytest
-from building_acoustics_interface.my_module import hello
+from building_acoustics_interface.Renderer import hello
 
 
 def test_hello():
