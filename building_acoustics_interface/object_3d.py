@@ -9,7 +9,7 @@ class Object3D:
 
         self.font = pg.font.SysFont('Arial', 30 , bold=True)
         self.color_faces = [(pg.Color('orange'), face) for face in self.faces]
-        self.movement_flag, self.draw_vertexes = True, False
+        self.movement_flag, self.draw_vertexes = False, False
         self.label = ''
 
     def draw(self):
@@ -32,15 +32,15 @@ class Object3D:
             color, face = color_face
             polygon = vertexes[face]
             if not np.any((polygon == self.render.H_WIDTH) | (polygon == self.render.H_HEIGHT)):
-                pg.draw.polygon(self.render.screen, color, polygon, 1)
+                pg.draw.polygon(self.render.background, color, polygon, 1)
                 if self.label:
                     text = self.font.render(self.label[index], True, pg.Color('white'))
-                    self.render.screen.blit(text, polygon[-1])
+                    self.render.background.blit(text, polygon[-1])
 
         if self.draw_vertexes:
             for vertex in vertexes:
                 if not np.any((vertex  == self.render.H_WIDTH) | (vertex == self.render.H_HEIGHT)):
-                    pg.draw.circle(self.render.screen, pg.Color('black'), vertex, 3)
+                    pg.draw.circle(self.render.background, pg.Color('black'), vertex, 3)
 
     def translate(self, pos):
         self.vertexes = self.vertexes @ translate(pos)

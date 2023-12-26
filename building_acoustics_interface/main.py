@@ -27,18 +27,20 @@ class window():
         self.toolbar = Toolbar(self.root)
         self.graph_display = graphDisplay(self.root)
         self.results_display = resultsDisplay(self.root)
-        self.renderer = Frame(self.root, width=750, height=750, highlightbackground='#595959', highlightthickness=2)
-        self.embed = Frame(self.renderer, width=748, height=748,)
-        self.renderer.pack(side="left")
-        self.embed.pack()
+        #self.renderer = Frame(self.root, width=750, height=750, highlightbackground='#595959', highlightthickness=2)
+        #self.embed = Frame(self.renderer, width=748, height=748,)
+        #self.renderer.pack(side="left")
+        #self.embed.pack()
 
         #this embeds the pygame window
-        os.environ['SDL_WINDOWID'] = str(self.embed.winfo_id())
-        sytem = platform.system()
-        if sytem == "windows":
-            os.environ['SDL_VIDEODRIVER'] == 'windib'
-        elif sytem == "Linux":
-            os.environ['SDL_VIDEODRIVER'] = 'x11'
+        #os.environ['SDL_WINDOWID'] = str(self.embed.winfo_id())
+        #sytem = platform.system()
+        #if sytem == "windows":
+        #    os.environ['SDL_VIDEODRIVER'] == 'windib'
+        #elif sytem == "Linux":
+        #    os.environ['SDL_VIDEODRIVER'] = 'x11'
 
-        self.root.update_idletasks()
+        #self.root.update_idletasks()
         self.root.mainloop()
+
+ui = window()
