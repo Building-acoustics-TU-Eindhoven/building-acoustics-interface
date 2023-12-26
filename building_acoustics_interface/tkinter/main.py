@@ -2,13 +2,13 @@ import tkinter as tk
 from toolbar import *
 from graphDisplay import *
 from resultsDisplay import *
-from renderer import *
-import os
-import platform
-from object_3d import *
-from camera import *
-from projection import *
-import pygame as pg
+#from renderer import *
+#import os
+#import platform
+#from object_3d import *
+#from camera import *
+#from projection import *
+#import pygame as pg
 
 # root window
 class window():
