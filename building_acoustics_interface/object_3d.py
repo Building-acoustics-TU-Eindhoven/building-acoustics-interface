@@ -32,10 +32,10 @@ class Object3D:
             color, face = color_face
             polygon = vertexes[face]
             if not np.any((polygon == self.render.H_WIDTH) | (polygon == self.render.H_HEIGHT)):
-                pg.draw.polygon(self.render.background, color, polygon, 1)
+                pg.draw.polygon(self.render.drawing_surface, color, polygon, 1)
                 if self.label:
                     text = self.font.render(self.label[index], True, pg.Color('white'))
-                    self.render.background.blit(text, polygon[-1])
+                    self.render.drawing_surface.blit(text, polygon[-1])
 
         if self.draw_vertexes:
             for vertex in vertexes:

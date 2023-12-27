@@ -6,10 +6,10 @@ import pygame_gui
 
 
 class SoftwareRender:
-    def __init__(self):
+    def __init__(self, drawing_surface):
         self.WIDTH, self.HEIGHT = 800, 600 
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
-        self.background = pg.Surface((800, 600))
+        self.drawing_surface = drawing_surface
         self.create_objects()
 
     def create_objects(self):
@@ -29,5 +29,5 @@ class SoftwareRender:
         return Object3D(self, vertex, faces)
 
     def draw(self):
-        self.background.fill(pg.Color('darkslategray'))
+        self.drawing_surface.fill(pg.Color('darkslategray'))
         self.object.draw()
