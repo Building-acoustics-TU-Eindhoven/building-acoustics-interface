@@ -25,7 +25,7 @@ class GUI:
 
         self.graph_display = GraphDisplay(self.manager)
 
-        self.numbers_display = ResultDisplay(self.manager)
+        self.numbers_display = ResultDisplay(self.manager, self.background_surface)
 
         self.clock = pg.time.Clock()
 
