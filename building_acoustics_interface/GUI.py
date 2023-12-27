@@ -12,13 +12,13 @@ class GUI:
         self.FPS = 60
         self.window_surface = pg.display.set_mode(self.RES)
         self.manager = pygame_gui.UIManager(self.RES)
+        self.background_surface = pg.Surface((self.WIDTH, self.HEIGHT))
+        self.background_surface.fill(pg.Color('white'))
 
         self.render_surface = pg.Surface((800, 600))
         self.render_surface.fill(pg.Color('white'))
         self.renderer = SoftwareRender(self.render_surface)
 
-        self.toolbar_surface = pg.Surface((self.WIDTH, self.HEIGHT))
-        self.toolbar_surface.fill(pg.Color('white'))
         self.toolbar = Toolbar(self.manager, self.WIDTH, 50)
 
         self.clock = pg.time.Clock()
@@ -41,7 +41,7 @@ class GUI:
             pg.display.flip()
             self.clock.tick(self.FPS)
             self.manager.update(time_delta)
-            self.window_surface.blit(self.toolbar_surface, (0, 0))
+            self.window_surface.blit(self.background_surface, (0, 0))
             self.window_surface.blit(self.render_surface, (0, 100))
             self.manager.draw_ui(self.window_surface)
 
