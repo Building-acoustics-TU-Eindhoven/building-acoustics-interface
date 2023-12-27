@@ -45,7 +45,7 @@ class GUI:
             pg.display.flip()
             self.clock.tick(self.FPS)
             self.manager.update(time_delta)
-            self.background_surface.blit(self.graph_display.processed_plot, (800, 0))
+            #self.background_surface.blit(self.graph_display.processed_plot, (800, 0))
             self.window_surface.blit(self.background_surface, (0, 0))
             self.window_surface.blit(self.render_surface, (0, 100))
             self.manager.draw_ui(self.window_surface)
