@@ -13,7 +13,7 @@ class GraphDisplay:
         self.manager = manager
         self.getPlots()
         self.processPlots(self.fig)
-        self.graph = pygame_gui.elements.UIImage(pg.Rect((800, 100), (300, 300)), self.processed_plot, manager= self.manager)
+        self.graph = pygame_gui.elements.UIImage(pg.Rect((800, 0), (300, 300)), self.processed_plot, manager= self.manager)
 
     def processPlots(self, plot):
         canvas = agg.FigureCanvasAgg(plot)

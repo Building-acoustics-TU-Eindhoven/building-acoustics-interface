@@ -2,20 +2,19 @@ from object_3d import *
 from camera import *
 from projection import *
 import pygame as pg
-import pygame_gui
-
 
 class SoftwareRender:
-    def __init__(self, drawing_surface):
+    def __init__(self, drawing_surface, file_path):
         self.WIDTH, self.HEIGHT = 800, 600 
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
         self.drawing_surface = drawing_surface
+        self.file_path = file_path
         self.create_objects()
 
     def create_objects(self):
         self.camera = Camera(self, [-5, 5, -50])
         self.projection = Projection(self)
-        self.object = self.get_object_from_file(r"C:\Users\20212466\OneDrive - TU Eindhoven\Documents\uni dingen\Year 3\student jobs Y3\accoustic ui project\UI repo\building-acoustics-interface\building_acoustics_interface\resources\tank.obj")
+        self.object = self.get_object_from_file(self.file_path)
 
     def get_object_from_file(self, filename):
         vertex, faces = [], []
