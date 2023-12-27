@@ -29,5 +29,5 @@ class SoftwareRender:
         return Object3D(self, vertex, faces)
 
     def draw(self):
-        self.drawing_surface.fill(pg.Color('darkslategray'))
+        self.drawing_surface.fill(pg.Color('white'))
         self.object.draw()

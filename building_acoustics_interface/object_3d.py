@@ -8,7 +8,7 @@ class Object3D:
         self.faces = np.array([np.array(f) for f in faces])
 
         self.font = pg.font.SysFont('Arial', 30 , bold=True)
-        self.color_faces = [(pg.Color('orange'), face) for face in self.faces]
+        self.color_faces = [(pg.Color('black'), face) for face in self.faces]
         self.movement_flag, self.draw_vertexes = False, False
         self.label = ''
 
@@ -34,7 +34,7 @@ class Object3D:
             if not np.any((polygon == self.render.H_WIDTH) | (polygon == self.render.H_HEIGHT)):
                 pg.draw.polygon(self.render.drawing_surface, color, polygon, 1)
                 if self.label:
-                    text = self.font.render(self.label[index], True, pg.Color('white'))
+                    text = self.font.render(self.label[index], True, pg.Color('black'))
                     self.render.drawing_surface.blit(text, polygon[-1])
 
         if self.draw_vertexes:

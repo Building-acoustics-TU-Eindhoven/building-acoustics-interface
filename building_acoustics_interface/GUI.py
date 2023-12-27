@@ -17,7 +17,7 @@ class GUI:
         self.render_surface.fill(pg.Color('white'))
         self.renderer = SoftwareRender(self.render_surface)
 
-        self.toolbar_surface = pg.Surface((self.WIDTH, 50))
+        self.toolbar_surface = pg.Surface((self.WIDTH, self.HEIGHT))
         self.toolbar_surface.fill(pg.Color('white'))
         self.toolbar = Toolbar(self.manager, self.WIDTH, 50)
 
