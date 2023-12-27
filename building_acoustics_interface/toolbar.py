@@ -7,6 +7,8 @@ class Toolbar:
         self.manager = manager
         self.WIDTH = width
         self.HEIGHT = height
+        self.file_dialog_width = 600
+        self.file_dialog_height = 500
         self.environment_settings = ["Ilaria", "Huiqing", "Someone else"]
         self.materials = ["wood", "metal", "earth"]
         self.graphs = ["one", "two", "three"]
@@ -17,10 +19,6 @@ class Toolbar:
         self.file_button = pygame_gui.elements.UIButton(pg.Rect((0, 0), (100, 50)), 
                                                         text='File', 
                                                         manager=self.manager) 
-           
-        self.file_dialog = pygame_gui.windows.UIFileDialog(pg.Rect((0,0), (400, 300)), 
-                                                           manager=self.manager, 
-                                                           visible=False)
         
         self.environment_menu = pygame_gui.elements.UIDropDownMenu(self.environment_settings, 
                                                             self.environment_settings[0], 

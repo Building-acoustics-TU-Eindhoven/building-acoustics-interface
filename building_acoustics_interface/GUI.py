@@ -43,7 +43,10 @@ class GUI:
                 
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == self.toolbar.file_button:
-                        self.toolbar.file_dialog = pygame_gui.windows.UIFileDialog(pg.Rect(((self.WIDTH / 2) - 400 / 2 , (self.HEIGHT / 2) - 300 / 2 ), (400, 300)), manager=self.manager)
+                        self.toolbar.file_dialog = pygame_gui.windows.UIFileDialog(pg.Rect(((self.WIDTH / 2) - self.toolbar.file_dialog_width / 2 , 
+                                                                                                (self.HEIGHT / 2) - self.toolbar.file_dialog_height / 2 ),
+                                                                                            (self.toolbar.file_dialog_width, self.toolbar.file_dialog_height)),
+                                                                                            manager=self.manager)
                 
                 if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
                     if event.ui_element == self.toolbar.file_dialog:
