@@ -1,8 +1,10 @@
 import pygame as pg
 import pygame_gui
+from pygame.locals import *
 
 from renderer import *
 from toolbar import *
+from graphDisplay import *
 
 
 class GUI:
@@ -10,7 +12,7 @@ class GUI:
         pg.init()
         self.RES = self.WIDTH, self.HEIGHT = 1200, 700
         self.FPS = 60
-        self.window_surface = pg.display.set_mode(self.RES)
+        self.window_surface = pg.display.set_mode(self.RES, DOUBLEBUF)
         self.manager = pygame_gui.UIManager(self.RES)
         self.background_surface = pg.Surface((self.WIDTH, self.HEIGHT))
         self.background_surface.fill(pg.Color('white'))
@@ -20,6 +22,8 @@ class GUI:
         self.renderer = SoftwareRender(self.render_surface)
 
         self.toolbar = Toolbar(self.manager, self.WIDTH, 50)
+
+        self.graph_display = GraphDisplay(self.manager)
 
         self.clock = pg.time.Clock()
 
@@ -41,6 +45,7 @@ class GUI:
             pg.display.flip()
             self.clock.tick(self.FPS)
             self.manager.update(time_delta)
+            self.background_surface.blit(self.graph_display.processed_plot, (800, 0))
             self.window_surface.blit(self.background_surface, (0, 0))
             self.window_surface.blit(self.render_surface, (0, 100))
             self.manager.draw_ui(self.window_surface)
