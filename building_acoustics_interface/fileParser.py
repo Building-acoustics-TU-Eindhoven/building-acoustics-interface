@@ -99,7 +99,6 @@ class FileParser:
             extension = self.path[last_dot_index:]
             if (extension.lower() == '.msh'):
                 if (self.file.split('\n')[1] == '2.2 0 8'):
-                    print("I found the version")
                     self.type = 'MSH 2.2'
                 elif(self.file.split('\n')[1] == '4.1 0 8'):
                     self.type = 'MSH 4.1'
