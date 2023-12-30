@@ -12,7 +12,7 @@ class Camera:
         self.v_fov = self.h_fov * (render.HEIGHT / render.WIDTH)
         self.near_plane = 0.1
         self.far_plane = 100
-        self.moving_speed = 0.02
+        self.moving_speed = 0.1
         self.rotation_speed = 0.01
 
     def control(self):

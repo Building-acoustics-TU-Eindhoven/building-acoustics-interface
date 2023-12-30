@@ -1,6 +1,6 @@
-from object_3d import *
 from camera import *
 from projection import *
+from fileParser import *
 import pygame as pg
 
 class SoftwareRender:
@@ -14,18 +14,7 @@ class SoftwareRender:
     def create_objects(self):
         self.camera = Camera(self, [-5, 5, -50])
         self.projection = Projection(self)
-        self.object = self.get_object_from_file(self.file_path)
-
-    def get_object_from_file(self, filename):
-        vertex, faces = [], []
-        with open(filename, 'r') as f:
-            for line in f:
-                if line.startswith('v '):
-                    vertex.append([float(i) for i in line.split()[1:]] + [1])
-                elif line.startswith('f'):
-                    faces_ = line.split()[1:]
-                    faces.append([int(face_.split('/')[0]) - 1 for face_ in faces_])
-        return Object3D(self, vertex, faces)
+        self.object = FileParser(self, self.file_path).object 
 
     def draw(self):
         self.drawing_surface.fill(pg.Color('white'))
