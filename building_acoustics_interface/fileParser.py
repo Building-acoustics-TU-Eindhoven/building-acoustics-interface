@@ -19,6 +19,16 @@ class FileParser:
             print("no good file")
             self.object = Object3D(self.render, [], [])
     
+    def parse_obj(self):
+        vertices, faces = [], []
+        for line in self.file.split('\n'):
+                if line.startswith('v '):
+                    vertices.append([float(i) for i in line.split()[1:]] + [1])
+                elif line.startswith('f'):
+                    faces_ = line.split()[1:]
+                    faces.append([int(face_.split('/')[0]) - 1 for face_ in faces_])
+        self.object = Object3D(self.render, vertices, faces)
+        
     def parse_msh_2_2(self):
         vertices, faces = [], []
         nodes_section = False
@@ -42,12 +52,11 @@ class FileParser:
                         vertices.append(values)
             elif (faces_section):
                 if line.strip():
-                    if (len(line.split()[1:]) == 7):
+                    if (len(line.split()[1:]) == 7): #only get faces of triangles, not simple lines or piramids
                         values = [int(val) - 1 for val in line.split()[-3:]]
                         faces.append(values)
         self.object = Object3D(self.render, vertices, faces)
 
-    
     def find_type(self):
         print(self.path)
         last_dot_index = self.path.rfind('.')
