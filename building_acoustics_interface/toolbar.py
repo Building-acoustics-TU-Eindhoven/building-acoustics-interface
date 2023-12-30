@@ -1,12 +1,13 @@
 import pygame as pg
 import pygame_gui
 
+from receiverWindow import ReceiverWindow
 class Toolbar:
     def __init__(self, manager, width, height):
        
         self.manager = manager
-        self.WIDTH = width
-        self.HEIGHT = height
+        self.main_WIDTH = width
+        self.main_HEIGHT = height
         self.file_dialog_width = 600
         self.file_dialog_height = 500
         self.environment_settings = ["Ilaria", "Huiqing", "Someone else"]
@@ -45,10 +46,23 @@ class Toolbar:
                                                             pg.Rect((500, 0), (100, 50)), 
                                                             manager=self.manager)
         
-        self.pos_receivers = pygame_gui.elements.UIDropDownMenu(self.receivers, 
-                                                            self.receivers[0], 
-                                                            pg.Rect((600, 0), (100, 50)), 
-                                                            manager=self.manager)
+        self.pos_receivers_button = pygame_gui.elements.UIButton(pg.Rect((600, 0), (100, 50)), 
+                                                        text='Receiver', 
+                                                        manager=self.manager) 
+        
+    def create_file_dialog(self):
+        self.file_dialog =  pygame_gui.windows.UIFileDialog(pg.Rect(((self.main_WIDTH / 2) - self.file_dialog_width / 2 , 
+                                                            (self.main_HEIGHT / 2) - self.file_dialog_height / 2 ),
+                                                        (self.file_dialog_width, self.file_dialog_height)),
+                                                        manager=self.manager)
+        return self.file_dialog
+    
+    def create_receiver_pos_window(self):
+        self.receiver_window =  ReceiverWindow(self.manager, 650, 300)
+        return self.receiver_window
+    
+    def kill_receiver_pos_window(self):
+        self.receiver_window.kill_window()
 
         #self.text_line = pygame_gui.elements.UITextEntryLine(pg.Rect((700, 200), (100, 50)), manager=self.manager)
         #self.selection = pygame_gui.elements.UISelectionList(pg.Rect((1000, 100), (100, 50)), names, manager=self.manager)

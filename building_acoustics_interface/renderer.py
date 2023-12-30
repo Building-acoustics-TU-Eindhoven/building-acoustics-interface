@@ -17,5 +17,5 @@ class SoftwareRender:
         self.object = FileParser(self, self.file_path).object 
 
     def draw(self):
-        self.drawing_surface.fill(pg.Color('white'))
+        self.drawing_surface.fill(pg.Color('darkgrey'))
         self.object.draw()

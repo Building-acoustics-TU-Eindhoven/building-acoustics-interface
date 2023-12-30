@@ -16,12 +16,13 @@ class GUI:
         self.window_surface = pg.display.set_mode(self.RES, DOUBLEBUF)
         self.manager = pygame_gui.UIManager(self.RES)
         self.background_surface = pg.Surface((self.WIDTH, self.HEIGHT))
-        self.background_surface.fill(pg.Color('white'))
+        self.background_surface.fill(pg.Color('darkgrey'))
+        self.receivers = []
 
         self.render_surface = pg.Surface((800, 600))
-        self.render_surface.fill(pg.Color('white'))
+        self.render_surface.fill(pg.Color('darkgrey'))
 
-        self.toolbar = Toolbar(self.manager, self.WIDTH, 50)
+        self.toolbar = Toolbar(self.manager, self.WIDTH, self.HEIGHT)
 
         self.graph_display = GraphDisplay(self.manager)
 
@@ -43,11 +44,14 @@ class GUI:
                 
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == self.toolbar.file_button:
-                        self.toolbar.file_dialog = pygame_gui.windows.UIFileDialog(pg.Rect(((self.WIDTH / 2) - self.toolbar.file_dialog_width / 2 , 
-                                                                                                (self.HEIGHT / 2) - self.toolbar.file_dialog_height / 2 ),
-                                                                                            (self.toolbar.file_dialog_width, self.toolbar.file_dialog_height)),
-                                                                                            manager=self.manager)
-                
+                        self.toolbar.create_file_dialog()
+                    elif event.ui_element == self.toolbar.pos_receivers_button:
+                        self.toolbar.create_receiver_pos_window()
+                    elif event.ui_element == self.toolbar.receiver_window.save_pos_receiver_button:
+                        self.receivers.append(self.toolbar.receiver_window.get_saved_pos())
+                        self.toolbar.kill_receiver_pos_window()
+                        print(self.receivers)
+
                 if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
                     if event.ui_element == self.toolbar.file_dialog:
                         self.file_path = event.text
