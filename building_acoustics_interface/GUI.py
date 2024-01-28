@@ -17,7 +17,6 @@ class GUI:
         self.manager = pygame_gui.UIManager(self.RES)
         self.background_surface = pg.Surface((self.WIDTH, self.HEIGHT))
         self.background_surface.fill(pg.Color('darkgrey'))
-        self.receivers = []
 
         self.render_surface = pg.Surface((800, 600))
         self.render_surface.fill(pg.Color('darkgrey'))
@@ -31,6 +30,7 @@ class GUI:
         self.clock = pg.time.Clock()
 
         self.rendering = False
+        self.renderer = SoftwareRender(self.render_surface, self.file_path)
 
     def run(self):
         while True:
@@ -45,18 +45,23 @@ class GUI:
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == self.toolbar.file_button:
                         self.toolbar.create_file_dialog()
-                    elif event.ui_element == self.toolbar.pos_receivers_button:
+                    elif event.ui_element == self.toolbar.button_receivers:
                         self.toolbar.create_receiver_pos_window()
-                    if self.toolbar.receiver_window != None:
+                    elif self.toolbar.receiver_window != None:
                         if event.ui_element == self.toolbar.receiver_window.save_pos_receiver_button:
                             self.receivers.append(self.toolbar.receiver_window.get_saved_pos())
                             self.toolbar.kill_receiver_pos_window()
-                            print(self.receivers)
+                    elif event.ui_element == self.toolbar.button_emitters:
+                        self.toolbar.create_emitter_window()
+                    elif self.toolbar.emitter_window != None:
+                        if event.ui_element == self.toolbar.emitter_window.save_pos_emitter_button:
+                            self.emitters.append(self.toolbar.emitter_window.get_saved_pos())
+                            self.toolbar.kill_emitter_window()
 
                 if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
                     if event.ui_element == self.toolbar.file_dialog:
                         self.file_path = event.text
-                        self.renderer = SoftwareRender(self.render_surface, self.file_path)
+                        
                         self.rendering = True
 
                 self.manager.process_events(event)

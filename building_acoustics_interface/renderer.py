@@ -9,6 +9,8 @@ class SoftwareRender:
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
         self.drawing_surface = drawing_surface
         self.file_path = file_path
+        self.receivers = []
+        self.emitters = []
         self.create_objects()
 
     def create_objects(self):

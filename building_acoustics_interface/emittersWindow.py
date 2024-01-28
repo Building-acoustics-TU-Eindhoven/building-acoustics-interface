@@ -1,7 +1,7 @@
 import pygame as pg
 import pygame_gui
 
-class ReceiverWindow:
+class EmitterWindow:
     def __init__(self, manager, width, height, parent_heigth, parent_width):
         self.manager = manager
         self.parent_heigth = parent_heigth
@@ -14,7 +14,7 @@ class ReceiverWindow:
         window_orientation = pg.Rect(((self.parent_width / 2) - self.width / 2, (self.parent_heigth / 2) - self.height / 2), (self.width, self.height))
         window = pygame_gui.elements.UIWindow(window_orientation, 
                                               manager=self.manager, 
-                                              window_display_title="Receiver settings")
+                                              window_display_title="Emitter settings")
         self.add_labels(window)
         self.add_textboxes(window)
         self.add_buttons(window)
@@ -46,7 +46,7 @@ class ReceiverWindow:
                                            container=window.get_container())
     
     def add_buttons(self, window):
-        self.save_pos_receiver_button = pygame_gui.elements.UIButton(pg.Rect((500, 190), (100, 50)), 
+        self.save_pos_emitter_button = pygame_gui.elements.UIButton(pg.Rect((500, 190), (100, 50)), 
                                                         text='Save', 
                                                         manager=self.manager,
                                                         container=window.get_container()) 
