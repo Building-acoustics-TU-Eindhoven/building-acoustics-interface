@@ -16,7 +16,7 @@ class SoftwareRender:
     def create_objects(self):
         self.camera = Camera(self, [-5, 5, -50])
         self.projection = Projection(self)
-        self.object = FileParser(self, self.file_path).object 
+        self.object = FileParser(self, self.file_path).object
 
     def draw(self):
         self.drawing_surface.fill(pg.Color('darkgrey'))

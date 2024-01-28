@@ -28,6 +28,32 @@ class Object3D:
         vertexes = vertexes @ self.render.projection.to_screen_matrix
         vertexes = vertexes[:, :2]
 
+        if self.render.emitters:
+            emitters = self.render.emitters @ self.render.camera.camera_matrix()
+            emitters = emitters @ self.render.projection.projection_matrix
+            emitters /= emitters[:, -1].reshape(-1, 1)
+            emitters[(emitters > 2) | (emitters < -2)] = 0
+            emitters = emitters @ self.render.projection.to_screen_matrix
+            emitters = emitters[:, :2]
+
+        if self.render.receivers:
+            receivers = self.render.receivers @ self.render.camera.camera_matrix()
+            receivers = receivers @ self.render.projection.projection_matrix
+            receivers /= receivers[:, -1].reshape(-1, 1)
+            receivers[(receivers > 2) | (receivers < -2)] = 0
+            receivers = receivers @ self.render.projection.to_screen_matrix
+            receivers = receivers[:, :2]
+
+
+
+        if self.render.emitters:
+            for vertex in emitters:
+                pg.draw.circle(self.render.drawing_surface, pg.Color('red'), vertex, 10)
+
+        if self.render.receivers:
+            for vertex in receivers:
+                pg.draw.circle(self.render.drawing_surface, pg.Color('green'), vertex, 10)
+
         for index, color_face in enumerate(self.color_faces):
             color, face = color_face
             polygon = vertexes[face]
@@ -37,10 +63,11 @@ class Object3D:
                     text = self.font.render(self.label[index], True, pg.Color('black'))
                     self.render.drawing_surface.blit(text, polygon[-1])
 
-        if self.draw_vertexes:
-            for vertex in vertexes:
-                if not np.any((vertex  == self.render.H_WIDTH) | (vertex == self.render.H_HEIGHT)):
-                    pg.draw.circle(self.render.background, pg.Color('black'), vertex, 3)
+        #if self.draw_vertexes:
+          #  for vertex in vertexes:
+              #  if not np.any((vertex  == self.render.H_WIDTH) | (vertex == self.render.H_HEIGHT)):
+                #    pg.draw.circle(self.render.background, pg.Color('black'), vertex, 3)
+
 
     def translate(self, pos):
         self.vertexes = self.vertexes @ translate(pos)

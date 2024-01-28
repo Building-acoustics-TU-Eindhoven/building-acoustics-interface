@@ -22,20 +22,20 @@ class GUI:
         self.render_surface.fill(pg.Color('darkgrey'))
 
         self.toolbar = Toolbar(self.manager, self.WIDTH, self.HEIGHT)
-
         self.graph_display = GraphDisplay(self.manager)
-
         self.numbers_display = ResultDisplay(self.manager, self.background_surface)
-
         self.clock = pg.time.Clock()
-
         self.rendering = False
-        self.renderer = SoftwareRender(self.render_surface, self.file_path)
+
+        self.receivers = []
+        self.emitters = []
 
     def run(self):
         while True:
             time_delta = self.clock.tick(60)/1000.0
             if self.rendering:
+                self.renderer.emitters = self.emitters
+                self.renderer.receivers = self.receivers
                 self.renderer.draw()
                 self.renderer.camera.control()
             for event in pg.event.get():
@@ -49,19 +49,18 @@ class GUI:
                         self.toolbar.create_receiver_pos_window()
                     elif self.toolbar.receiver_window != None:
                         if event.ui_element == self.toolbar.receiver_window.save_pos_receiver_button:
-                            self.receivers.append(self.toolbar.receiver_window.get_saved_pos())
+                            self.receivers.append(self.toolbar.receiver_window.get_saved_pos() + [1])
                             self.toolbar.kill_receiver_pos_window()
                     elif event.ui_element == self.toolbar.button_emitters:
                         self.toolbar.create_emitter_window()
                     elif self.toolbar.emitter_window != None:
                         if event.ui_element == self.toolbar.emitter_window.save_pos_emitter_button:
-                            self.emitters.append(self.toolbar.emitter_window.get_saved_pos())
+                            self.emitters.append(self.toolbar.emitter_window.get_saved_pos() + [1])
                             self.toolbar.kill_emitter_window()
 
                 if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
                     if event.ui_element == self.toolbar.file_dialog:
-                        self.file_path = event.text
-                        
+                        self.renderer = SoftwareRender(self.render_surface, event.text)
                         self.rendering = True
 
                 self.manager.process_events(event)
