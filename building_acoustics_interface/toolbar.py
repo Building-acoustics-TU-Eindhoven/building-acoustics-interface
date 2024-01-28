@@ -10,6 +10,7 @@ class Toolbar:
         self.main_HEIGHT = height
         self.file_dialog_width = 600
         self.file_dialog_height = 500
+        self.receiver_window = None
         self.environment_settings = ["Ilaria", "Huiqing", "Someone else"]
         self.materials = ["wood", "metal", "earth"]
         self.graphs = ["one", "two", "three"]

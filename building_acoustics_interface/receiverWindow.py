@@ -9,7 +9,7 @@ class ReceiverWindow:
         self.window = self.create_window()
 
     def create_window(self):
-        window = pygame_gui.elements.UIWindow(pg.Rect((300, 300), (self.width, self.height)),
+        window = pygame_gui.elements.UIWindow(pg.Rect((200, 300), (self.width, self.height)),
                                              manager=self.manager,
                                              window_display_title="Receiver settings")
         self.add_labels(window)

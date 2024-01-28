@@ -47,10 +47,11 @@ class GUI:
                         self.toolbar.create_file_dialog()
                     elif event.ui_element == self.toolbar.pos_receivers_button:
                         self.toolbar.create_receiver_pos_window()
-                    elif event.ui_element == self.toolbar.receiver_window.save_pos_receiver_button:
-                        self.receivers.append(self.toolbar.receiver_window.get_saved_pos())
-                        self.toolbar.kill_receiver_pos_window()
-                        print(self.receivers)
+                    if self.toolbar.receiver_window != None:
+                        if event.ui_element == self.toolbar.receiver_window.save_pos_receiver_button:
+                            self.receivers.append(self.toolbar.receiver_window.get_saved_pos())
+                            self.toolbar.kill_receiver_pos_window()
+                            print(self.receivers)
 
                 if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
                     if event.ui_element == self.toolbar.file_dialog:
