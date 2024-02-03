@@ -50,6 +50,10 @@ class Toolbar:
                                                         text='Receivers', 
                                                         manager=self.manager) 
         
+        self.button_calculate = pygame_gui.elements.UIButton(pg.Rect((700, 0), (100, 50)), 
+                                                        text='Calculate', 
+                                                        manager=self.manager) 
+        
     def create_file_dialog(self):
         self.file_dialog =  pygame_gui.windows.UIFileDialog(pg.Rect(((self.main_WIDTH / 2) - self.file_dialog_width / 2 , 
                                                             (self.main_HEIGHT / 2) - self.file_dialog_height / 2 ),

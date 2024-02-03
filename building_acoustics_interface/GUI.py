@@ -6,6 +6,7 @@ from renderer import *
 from toolbar import *
 from graphDisplay import *
 from resultsDisplay import *
+from FVM import *
 
 
 class GUI:
@@ -24,6 +25,7 @@ class GUI:
         self.toolbar = Toolbar(self.manager, self.WIDTH, self.HEIGHT)
         self.graph_display = GraphDisplay(self.manager)
         self.numbers_display = ResultDisplay(self.manager, self.background_surface)
+        self.calculator = FVM("something")
         self.clock = pg.time.Clock()
         self.rendering = False
 
@@ -52,7 +54,7 @@ class GUI:
                             self.receivers.append(self.toolbar.receiver_window.get_saved_pos() + [1])
                             self.toolbar.kill_receiver_pos_window()
                     elif event.ui_element == self.toolbar.button_emitters:
-                        self.toolbar.create_emitter_window()
+                         self.toolbar.create_emitter_window()
                     elif self.toolbar.emitter_window != None:
                         if event.ui_element == self.toolbar.emitter_window.save_pos_emitter_button:
                             self.emitters.append(self.toolbar.emitter_window.get_saved_pos() + [1])
