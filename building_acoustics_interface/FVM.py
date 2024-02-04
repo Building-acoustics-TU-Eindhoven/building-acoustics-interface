@@ -7,16 +7,15 @@ Created on Wed Aug  2 16:12:40 2023
 
 #Code developed by Ilaria Fichera for the analysis of the FVM method adapted solving the 3D diffusion equation with one intermittent omnidirectional sound source
 #Import modules
-import math
+from math import log
+from math import ceil
+from math import sqrt
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 #from scipy.integrate import simps
 #from scipy import linalg
 import sys
-from math import ceil
-from math import log
-from math import sqrt
 from FunctionRT import *
 from FunctionEDT import *
 from FunctionClarity import *
@@ -36,14 +35,15 @@ import gmsh
 class FVM:
     def start(self, pos_source, pos_rec, abs_coeff, file):
         self.file = file
+        self.results = {}
         self.st = time.time() #start time of calculation
         self.set_inputs(pos_source, pos_rec, abs_coeff)
         self.init_gmsh()
         self.calculate()
         self.collect_results()
 
-    def get_results():
-        pass
+    def get_results(self):
+        return self.results
 
     def set_inputs(self, pos_source, pos_rec, abs_coeff):
         #%%
@@ -58,14 +58,14 @@ class FVM:
         self.dt = 1/20000 #time discretizatione
 
         # Source position
-        self.x_source = pos_source[0] #0.5  #position of the source in the x direction [m]
-        self.y_source = pos_source[1] #0.5  #position of the source in the y direction [m]
-        self.z_source = pos_source[2] #1.0  #position of the source in the z direction [m]
+        self.x_source = pos_source[0][0] #0.5  #position of the source in the x direction [m]
+        self.y_source = pos_source[0][1] #0.5  #position of the source in the y direction [m]
+        self.z_source = pos_source[0][2] #1.0  #position of the source in the z direction [m]
 
         # Receiver position
-        self.x_rec = pos_rec[0] #2.0 #position of the receiver in the x direction [m]
-        self.y_rec = pos_rec[1] #0.5 #position of the receiver in the y direction [m]
-        self.z_rec = pos_rec[2] #1.0 #position of the receiver in the z direction [m]
+        self.x_rec = pos_rec[0][0] #2.0 #position of the receiver in the x direction [m]
+        self.y_rec = pos_rec[0][1] #0.5 #position of the receiver in the y direction [m]
+        self.z_rec = pos_rec[0][2] #1.0 #position of the receiver in the z direction [m]
 
         #Absorption term and Absorption coefficients
         self.th = 3 #int(input("Enter type Absortion conditions (option 1,2,3):")) 
@@ -357,7 +357,6 @@ class FVM:
         for group in vGroupsNames:
             if group[0] != 2:
                 continue
-            self.abscoeff = self.abscoeff.split(",")
             #abscoeff = [float(i) for i in abscoeff][-1] #for one frequency
             abscoeff_list = [float(i) for i in self.abscoeff] #for multiple frequencies
             
@@ -400,7 +399,7 @@ class FVM:
         #######################################################################################################
         #######################################################################################################
         self.total_boundArea = 0 #initialization of total surface area of the room
-        boundary_areas = []  #Initialize a list to store boundary_areas values for each tetrahedron
+        self.boundary_areas = []  #Initialize a list to store boundary_areas values for each tetrahedron
         import itertools
         face_areas = np.zeros(len(velemNodes)) #Per each tetrahedron, if there is a face that is on the boundary, include the area, otehrwise zero
         for idx, element in enumerate(velemNodes): #for index and element in the number of tetrahedrons
@@ -447,7 +446,7 @@ class FVM:
                                     
                                     total_tetrahedron_boundary_areas = tetrahedron_boundary_areas #if there are multiple surfaces on the boundary per each tetrahedron, then add also the second and the third one
                                     
-                boundary_areas.append(np.array(total_tetrahedron_boundary_areas)) #Append the total boundary_areas for the tetrahedron to the list
+                self.boundary_areas.append(np.array(total_tetrahedron_boundary_areas)) #Append the total boundary_areas for the tetrahedron to the list
                 print(total_tetrahedron_boundary_areas)
 
         gmsh.finalize()
@@ -492,7 +491,7 @@ class FVM:
         ###############################################################################
 
         #distance between source and receiver
-        self.dist_sr = math.sqrt((abs(self.x_rec - self.x_source))**2 + (abs(self.y_rec - self.y_source))**2 + (abs(self.z_rec - self.z_source))**2) #distance between source and receiver
+        self.dist_sr = sqrt((abs(self.x_rec - self.x_source))**2 + (abs(self.y_rec - self.y_source))**2 + (abs(self.z_rec - self.z_source))**2) #distance between source and receiver
 
         coord_source = [self.x_source, self.y_source, self.z_source] #coordinates of the receiver position in an list
         coord_rec = [self.x_rec, self.y_rec, self.z_rec] #coordinates of the receiver position in an list
@@ -542,7 +541,7 @@ class FVM:
         #Position of source is the centre of a cell so the minimum distance with the centre of a cell has been calculated to understand which cell is the closest
         dist_source_cc_list = [] #initialise the list for all the distances between each cell centre and the source
         for i in range(len(self.cell_center)): #for each tetra
-            dist_source_cc = math.sqrt(np.sum((self.cell_center[i] - coord_source)**2)) #calculate the distance between its centre cell and the source coordinate
+            dist_source_cc = sqrt(np.sum((self.cell_center[i] - coord_source)**2)) #calculate the distance between its centre cell and the source coordinate
             dist_source_cc_list.append(dist_source_cc) #append the distance in a list
         source_idx = np.argmin(dist_source_cc_list) #take the minimum distance index; this is where the source will be positioned
 
@@ -714,7 +713,7 @@ class FVM:
         #Position of receiver is the centre of a cell so the minimum distance with the centre of a cell has been calculated to understand which cell is the closest
         dist_rec_cc_list = [] #initialise the list for all the distances between each cell centre and the source
         for i in range(len(self.cell_center)): #for each tetra
-            dist_rec_cc = math.sqrt(np.sum((self.cell_center[i] - coord_rec)**2)) #calculate the distance between its centre cell and the source coordinate
+            dist_rec_cc = sqrt(np.sum((self.cell_center[i] - coord_rec)**2)) #calculate the distance between its centre cell and the source coordinate
             dist_rec_cc_list.append(dist_rec_cc) #append the distance in a list
         rec_idx = np.argmin(dist_rec_cc_list) #take the minimum distance index; this is where the source will be positioned
 
@@ -790,11 +789,11 @@ class FVM:
         for x_chang in x_axis:
             line_rec = [x_chang, self.y_rec, self.z_rec]
             #Position of line_receiver is the centre of a cell
-            dist_line_rec_x =  math.sqrt((abs(line_rec[0] - self.x_source))**2 + (abs(line_rec[1] - self.y_source))**2 + (abs(line_rec[2] - self.z_source))**2) #distance between source and line_receiver
+            dist_line_rec_x =  sqrt((abs(line_rec[0] - self.x_source))**2 + (abs(line_rec[1] - self.y_source))**2 + (abs(line_rec[2] - self.z_source))**2) #distance between source and line_receiver
             self.dist_x = np.append(self.dist_x, dist_line_rec_x)  # Append to the NumPy array
             dist_line_rec_x_cc_list = []
             for i in range(len(self.cell_center)):
-                dist_line_rec_x_cc = math.sqrt(np.sum((self.cell_center[i] - line_rec)**2))
+                dist_line_rec_x_cc = sqrt(np.sum((self.cell_center[i] - line_rec)**2))
                 dist_line_rec_x_cc_list.append(dist_line_rec_x_cc)
             line_rec_x_idx = np.argmin(dist_line_rec_x_cc_list)
             self.line_rec_x_idx_list.append(line_rec_x_idx)   
@@ -807,11 +806,11 @@ class FVM:
         for y_chang in y_axis:
             line_rec = [self.x_rec, y_chang, self.z_rec]
             #Position of line_receiver is the centre of a cell
-            dist_line_rec_y =  math.sqrt((abs(line_rec[0] - self.x_source))**2 + (abs(line_rec[1] - self.y_source))**2 + (abs(line_rec[2] - self.z_source))**2) #distance between source and line_receiver
+            dist_line_rec_y =  sqrt((abs(line_rec[0] - self.x_source))**2 + (abs(line_rec[1] - self.y_source))**2 + (abs(line_rec[2] - self.z_source))**2) #distance between source and line_receiver
             self.dist_y = np.append(self.dist_y, dist_line_rec_y)  # Append to the NumPy array
             dist_line_rec_y_cc_list = []
             for i in range(len(self.cell_center)):
-                dist_line_rec_y_cc = math.sqrt(np.sum((self.cell_center[i] - line_rec)**2))
+                dist_line_rec_y_cc = sqrt(np.sum((self.cell_center[i] - line_rec)**2))
                 dist_line_rec_y_cc_list.append(dist_line_rec_y_cc)
             line_rec_y_idx = np.argmin(dist_line_rec_y_cc_list)
             self.line_rec_y_idx_list.append(line_rec_y_idx)  
@@ -831,14 +830,14 @@ class FVM:
         #CALCULATION OF BETA_ZERO
         ###############################################################################
 
-        boundary_areas = np.array(boundary_areas)
-        boundary_areas = boundary_areas.T
+        self.boundary_areas = np.array(self.boundary_areas)
+        self.boundary_areas = self.boundary_areas.T
         beta_zero_freq = []
-        for iBand in range(len(boundary_areas)):
+        for iBand in range(len(self.boundary_areas)):
             print(iBand)
             #freq = center_freq[iBand]
-            print(boundary_areas[iBand])
-            beta_zero_element = np.divide(self.dt*((Dx * self.interior_tet_sum) + boundary_areas[iBand]),self.cell_volume) #my interpretation of the beta_zero
+            print(self.boundary_areas[iBand])
+            beta_zero_element = np.divide(self.dt*((Dx * self.interior_tet_sum) + self.boundary_areas[iBand]),self.cell_volume) #my interpretation of the beta_zero
             beta_zero_freq.append(beta_zero_element)
 
         #%%
@@ -930,6 +929,7 @@ class FVM:
         ###############################################################################
         #RESULTS
         ###############################################################################
+        dic_graphs = {}
 
         w_rec_x_band = []
         w_rec_y_band = []
@@ -999,50 +999,88 @@ class FVM:
 
         if self.tcalc == "decay":
             for iBand in range(self.nBands):
-                #Figure 5: Decay of SPL in the recording_time
-                plt.figure(5)
-                plt.plot(self.t, spl_r_band[iBand])  # plot sound pressure level with Pref = (2e-5)**5
-                plt.title("Figure 5 :SPL over time at the receiver")
-                plt.xlabel("t [s]")
-                plt.ylabel("SPL [dB]")
-                plt.xlim()
-                plt.ylim()
-                plt.xticks(np.arange(0, self.recording_time + 0.1, 0.5))
-                plt.yticks(np.arange(0, 120, 20))
-            
-                #Figure 6: Decay of SPL in the recording_time normalised to maximum 0dB
-                plt.figure(6)
-                plt.plot(self.t,spl_r_norm_band[iBand])
-                plt.title("Figure 6: Normalised SPL over time at the receiver")
-                plt.xlabel("t [s]")
-                plt.ylabel("SPL [dB]")
-                plt.xlim()
-                plt.ylim()
-                plt.xticks(np.arange(0, self.recording_time +0.1, 0.1))
-                plt.yticks(np.arange(0, -60, -10))
-                
-                #Figure 7: Energy density at the receiver over time
-                plt.figure(7)
-                plt.plot(self.t, self.w_rec_band[iBand])
-                plt.title("Figure 7: Energy density over time at the receiver")
-                plt.xlabel("t [s]")
-                plt.ylabel("Energy density [kg m^-1 s^-2]")
-                plt.xlim()
-                plt.ylim()
-                plt.xticks(np.arange(0, self.recording_time +0.1, 0.1))
-                
-                #Figure 8: Schroeder decay
-                plt.figure(8)
-                plt.plot(self.t[idx_w_rec:],sch_db_band[iBand])
-                plt.title("Figure 8: Schroeder decay (Energy Decay Curve)")
-                plt.xlabel("t [s]")
-                plt.ylabel("Energy decay [dB]")
-                plt.xlim()
-                plt.ylim()
-                plt.xticks(np.arange(self.t[idx_w_rec], self.recording_time +0.1, 0.1))
+                #Figure 1: Decay of SPL in the recording_time
+                fig = plt.figure()  # Create a Figure object
+                ax = fig.add_subplot(111) # Add an Axes to the Figure
+                ax.plot(self.t, spl_r_band[iBand]) # Plot the data on the Axes
 
-                plt.show()
+                # Set the title and labels
+                ax.set_title("Figure 1 :SPL over time at the receiver")
+                ax.set_xlabel("t [s]")
+                ax.set_ylabel("SPL [dB]")
+
+                # Set the x and y limits if necessary
+                ax.set_xlim()  
+                ax.set_ylim()
+
+                # Customize the x-ticks
+                ax.set_xticks(np.arange(0, self.recording_time + 0.1, 0.5))
+                ax.set_yticks(np.arange(0, 120, 20))
+
+                dic_graphs['decay SPL'] = ax
+
             
+                #Figure 2: Decay of SPL in the recording_time normalised to maximum 0dB
+                fig = plt.figure()  # Create a Figure object
+                ax = fig.add_subplot(111) # Add an Axes to the Figure
+                ax.plot(self.t, spl_r_norm_band[iBand]) # Plot the data on the Axes
+
+                # Set the title and labels
+                ax.set_title("Figure 2: Normalised SPL over time at the receiver")
+                ax.set_xlabel("t [s]")
+                ax.set_ylabel("SPL [dB]")
+
+                # Set the x and y limits if necessary
+                ax.set_xlim()  
+                ax.set_ylim()
+
+                # Customize the x-ticks
+                ax.set_xticks(np.arange(0, self.recording_time +0.1, 0.1))
+                ax.set_yticks(np.arange(0, -60, -10))
+
+                dic_graphs['Normalized decay SPL'] = ax
+
+                #Figure 3: Energy density at the receiver over time
+                fig = plt.figure()  # Create a Figure object
+                ax = fig.add_subplot(111) # Add an Axes to the Figure
+                ax.plot(self.t, self.w_rec_band[iBand]) # Plot the data on the Axes
+
+                # Set the title and labels
+                ax.set_title("Figure 3: Energy density over time at the receiver")
+                ax.set_xlabel("t [s]")
+                ax.set_ylabel("Energy density [kg m^-1 s^-2]")
+
+                # Set the x and y limits if necessary
+                ax.set_xlim()  
+                ax.set_ylim()
+
+                # Customize the x-ticks
+                ax.set_xticks(np.arange(0, self.recording_time + 0.1, 0.1))
+
+                # If you need to store the 'plot' in a dictionary like before, use 'ax' instead
+                dic_graphs['Energy density'] = ax
+            
+                #figure 4: something
+                fig = plt.figure()  # Create a Figure object
+                ax = fig.add_subplot(111) # Add an Axes to the Figure
+                ax.plot(self.t[idx_w_rec:], sch_db_band[iBand]) # Plot the data on the Axes
+
+                # Set the title and labels
+                ax.set_title("Figure 4: Schroeder decay (Energy Decay Curve)")
+                ax.set_xlabel("t [s]")
+                ax.set_ylabel("Energy decay [dB]")
+
+                # Set the x and y limits if necessary
+                ax.set_xlim()  
+                ax.set_ylim()
+
+                # Customize the x-ticks
+                ax.set_xticks(np.arange(self.t[idx_w_rec], self.recording_time + 0.1, 0.1))
+
+                # If you need to store the 'plot' in a dictionary like before, use 'ax' instead
+                dic_graphs['Schroeder decay'] = ax
+
+        self.results = dic_graphs
         #???????
         # if tcalc == "stationarysource":
         #     for iBand in range(nBands):

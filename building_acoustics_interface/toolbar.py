@@ -3,6 +3,7 @@ import pygame_gui
 
 from receiverWindow import ReceiverWindow
 from emittersWindow import EmitterWindow
+from absCoeffWindow import AbsCoeffWindow
 
 class Toolbar:
     def __init__(self, manager, width, height):
@@ -14,6 +15,7 @@ class Toolbar:
         self.file_dialog_height = 500
         self.receiver_window = None
         self.emitter_window = None
+        self.abs_coeff_window = None
         self.environment_settings = ["Ilaria", "Huiqing", "Someone else"]
         self.graphs = ["one", "two", "three"]
         self.numerical = ["reverb", "decibel", "bang"]
@@ -76,5 +78,9 @@ class Toolbar:
         self.emitter_window = None
 
     def create_absorb_coeff_window(self):
-        self.receiver_window =  Ab(self.manager, 650, 300, self.main_HEIGHT, self.main_WIDTH)
-        return self.receiver_window
+        self.abs_coeff_window =  AbsCoeffWindow(self.manager, 650, 300, self.main_HEIGHT, self.main_WIDTH)
+        return self.abs_coeff_window
+    
+    def kill_abs_coeff_window(self):
+        self.abs_coeff_window.kill_window()
+        self.abs_coeff_window = None

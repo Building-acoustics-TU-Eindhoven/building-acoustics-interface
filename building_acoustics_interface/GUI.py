@@ -19,12 +19,11 @@ class GUI:
         self.background_surface = pg.Surface((self.WIDTH, self.HEIGHT))
         self.background_surface.fill(pg.Color('darkgrey'))
 
-        self.render_surface = pg.Surface((800, 600))
-        self.render_surface.fill(pg.Color('darkgrey'))
-
         self.toolbar = Toolbar(self.manager, self.WIDTH, self.HEIGHT)
-        self.graph_display = GraphDisplay(self.manager)
-        self.numbers_display = ResultDisplay(self.manager, self.background_surface)
+        self.graph_display = GraphDisplay(self.manager, 600, 650, 600, 50)
+        self.render_surface = pg.Surface((600, 650))
+        self.render_surface.fill(pg.Color('darkgrey'))
+        #self.num_display = ResultDisplay(self.manager, self.background_surface)
         self.calculator = FVM()
         self.clock = pg.time.Clock()
         self.rendering = False
@@ -64,10 +63,15 @@ class GUI:
                     elif event.ui_element == self.toolbar.button_calculate:
                         if (self.emitters and self.receivers and self.abs_coeff):
                             self.calculator.start(self.emitters, self.receivers, self.abs_coeff, self.file)
-                            self.calculator.get_results()
+                            self.graph_display.updateDisplay(["decay SPL", "Normalized decay SPL", "Energy density", "Schroeder decay"], self.calculator.get_results())
+                        else:
+                            print("not inputted receiver, emitter or absorbtion coeffficient")
                     elif event.ui_element == self.toolbar.button_absorb_coeff:
                         self.toolbar.create_absorb_coeff_window()
-
+                    elif self.toolbar.abs_coeff_window != None:
+                        if event.ui_element == self.toolbar.abs_coeff_window.save_abs_coeff_button:
+                            self.abs_coeff = self.toolbar.abs_coeff_window.get_saved_coeff()
+                            self.toolbar.kill_abs_coeff_window()
 
                 if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
                     if event.ui_element == self.toolbar.file_dialog:
