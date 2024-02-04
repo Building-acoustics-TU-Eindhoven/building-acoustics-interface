@@ -3,6 +3,7 @@ import pygame_gui
 
 from receiverWindow import ReceiverWindow
 from emittersWindow import EmitterWindow
+
 class Toolbar:
     def __init__(self, manager, width, height):
        
@@ -14,7 +15,6 @@ class Toolbar:
         self.receiver_window = None
         self.emitter_window = None
         self.environment_settings = ["Ilaria", "Huiqing", "Someone else"]
-        self.materials = ["wood", "metal", "earth"]
         self.graphs = ["one", "two", "three"]
         self.numerical = ["reverb", "decibel", "bang"]
 
@@ -26,12 +26,6 @@ class Toolbar:
                                                             self.environment_settings[0], 
                                                             pg.Rect((100, 0), (100, 50)), 
                                                             manager=self.manager)
-        
-        self.materials_menu = pygame_gui.elements.UIDropDownMenu(self.materials, 
-                                                            self.materials[0], 
-                                                            pg.Rect((200, 0), (100, 50)), 
-                                                            manager=self.manager)
-        
         self.graph_results_menu = pygame_gui.elements.UIDropDownMenu(self.graphs, 
                                                             self.graphs[0], 
                                                             pg.Rect((300, 0), (100, 50)), 
@@ -40,6 +34,10 @@ class Toolbar:
         self.numbers_result_menu = pygame_gui.elements.UIDropDownMenu(self.numerical, 
                                                             self.numerical[0], 
                                                             pg.Rect((400, 0), (100, 50)), 
+                                                            manager=self.manager)
+        
+        self.button_absorb_coeff = pygame_gui.elements.UIButton(pg.Rect((200, 0), (100, 50)), 
+                                                            text="Absorbtion coefficient",
                                                             manager=self.manager)
         
         self.button_emitters = pygame_gui.elements.UIButton(pg.Rect((500, 0), (100, 50)), 
@@ -76,3 +74,7 @@ class Toolbar:
     def kill_emitter_window(self):
         self.emitter_window.kill_window()
         self.emitter_window = None
+
+    def create_absorb_coeff_window(self):
+        self.receiver_window =  Ab(self.manager, 650, 300, self.main_HEIGHT, self.main_WIDTH)
+        return self.receiver_window
