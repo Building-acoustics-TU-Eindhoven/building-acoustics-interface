@@ -34,12 +34,10 @@ import time as time
 import gmsh
  
 class FVM:
-    def __init__(self, file):
+    def start(self, pos_source, pos_rec, abs_coeff, file):
         self.file = file
-        
-    def start(self):
         self.st = time.time() #start time of calculation
-        self.set_inputs()
+        self.set_inputs(pos_source, pos_rec, abs_coeff)
         self.init_gmsh()
         self.calculate()
         self.collect_results()
@@ -47,13 +45,12 @@ class FVM:
     def get_results():
         pass
 
-    def set_inputs(self):
+    def set_inputs(self, pos_source, pos_rec, abs_coeff):
         #%%
         ###############################################################################
         #INPUT VARIABLES
         ###############################################################################
 
-        print("here")
         #General settings
         self.c0= 343 #adiabatic speed of sound [m.s^-1]
         self.m_atm = 0 #air absorption coefficient [1/m] from Billon 2008 paper and Navarro paper 2012
@@ -61,14 +58,14 @@ class FVM:
         self.dt = 1/20000 #time discretizatione
 
         # Source position
-        self.x_source = 0.5  #position of the source in the x direction [m]
-        self.y_source = 0.5  #position of the source in the y direction [m]
-        self.z_source = 1.0  #position of the source in the z direction [m]
+        self.x_source = pos_source[0] #0.5  #position of the source in the x direction [m]
+        self.y_source = pos_source[1] #0.5  #position of the source in the y direction [m]
+        self.z_source = pos_source[2] #1.0  #position of the source in the z direction [m]
 
         # Receiver position
-        self.x_rec = 2.0 #position of the receiver in the x direction [m]
-        self.y_rec = 0.5 #position of the receiver in the y direction [m]
-        self.z_rec = 1.0 #position of the receiver in the z direction [m]
+        self.x_rec = pos_rec[0] #2.0 #position of the receiver in the x direction [m]
+        self.y_rec = pos_rec[1] #0.5 #position of the receiver in the y direction [m]
+        self.z_rec = pos_rec[2] #1.0 #position of the receiver in the z direction [m]
 
         #Absorption term and Absorption coefficients
         self.th = 3 #int(input("Enter type Absortion conditions (option 1,2,3):")) 
@@ -98,7 +95,7 @@ class FVM:
         self.num_octave = 1
 
         # Absorbtion coefficients
-        self.absorption_coefficient = {}
+        self.abscoeff = abs_coeff
 
         self.x_frequencies  = self.num_octave * log(self.fc_high/self.fc_low) / log(2)
         self.nBands = int(self.num_octave * log(self.fc_high/self.fc_low) / log(2) + 1)
@@ -355,17 +352,14 @@ class FVM:
         # Initialize a list to store surface tags and their absorption coefficients
         surface_absorption = [] #initialization absorption term (alpha*surfaceofwall) for each wall of the room
         triangle_face_absorption = [] #initialization absorption term for each triangle face at the boundary and per each wall
+        self.absorption_coefficient = {}
 
         for group in vGroupsNames:
             if group[0] != 2:
                 continue
-            name_group = group[2]
-            name_split = name_group.split("$")
-            name_abs_coeff = name_split[0]
-            abscoeff = input(f"Enter absorption coefficient for frequency {self.fc_low} to {self.fc_high} for {name_abs_coeff}:") 
-            abscoeff = abscoeff.split(",")
+            self.abscoeff = self.abscoeff.split(",")
             #abscoeff = [float(i) for i in abscoeff][-1] #for one frequency
-            abscoeff_list = [float(i) for i in abscoeff] #for multiple frequencies
+            abscoeff_list = [float(i) for i in self.abscoeff] #for multiple frequencies
             
             physical_tag = group[1] #Get the physical group tag
             entities = gmsh.model.getEntitiesForPhysicalGroup(2, physical_tag) #Retrieve all the entities in this physical group (the entities are the number of walls in the physical group)

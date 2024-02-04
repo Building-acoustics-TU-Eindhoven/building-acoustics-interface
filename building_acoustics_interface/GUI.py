@@ -25,12 +25,14 @@ class GUI:
         self.toolbar = Toolbar(self.manager, self.WIDTH, self.HEIGHT)
         self.graph_display = GraphDisplay(self.manager)
         self.numbers_display = ResultDisplay(self.manager, self.background_surface)
-        self.calculator = FVM("something")
+        self.calculator = FVM()
         self.clock = pg.time.Clock()
         self.rendering = False
 
         self.receivers = []
         self.emitters = []
+        self.abs_coeff = []
+        self.file = ""
 
     def run(self):
         while True:
@@ -59,10 +61,18 @@ class GUI:
                         if event.ui_element == self.toolbar.emitter_window.save_pos_emitter_button:
                             self.emitters.append(self.toolbar.emitter_window.get_saved_pos() + [1])
                             self.toolbar.kill_emitter_window()
+                    elif event.ui_element == self.toolbar.button_calculate:
+                        if (self.emitters and self.receivers and self.abs_coeff):
+                            self.calculator.start(self.emitters, self.receivers, self.abs_coeff, self.file)
+                            self.calculator.get_results()
+                    elif event.ui_element == self.toolbar.button_absorb_coeff:
+                        self.toolbar.create_absorb_coeff_window()
+
 
                 if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
                     if event.ui_element == self.toolbar.file_dialog:
-                        self.renderer = SoftwareRender(self.render_surface, event.text)
+                        self.file = event.text
+                        self.renderer = SoftwareRender(self.render_surface, self.file)
                         self.rendering = True
 
                 self.manager.process_events(event)
