@@ -22,7 +22,7 @@ class GUI:
         self.toolbar = Toolbar(self.manager, self.WIDTH, self.HEIGHT)
         self.graph_display = GraphDisplay(self.manager, 600, 650, 600, 50)
         self.render_surface = pg.Surface((600, 650))
-        self.render_surface.fill(pg.Color('darkgrey'))
+        self.render_surface.fill(pg.Color('white'))
         #self.num_display = ResultDisplay(self.manager, self.background_surface)
         self.calculator = FVM()
         self.clock = pg.time.Clock()

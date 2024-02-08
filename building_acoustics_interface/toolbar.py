@@ -16,9 +16,7 @@ class Toolbar:
         self.receiver_window = None
         self.emitter_window = None
         self.abs_coeff_window = None
-        self.environment_settings = ["Ilaria", "Huiqing", "Someone else"]
-        self.graphs = ["one", "two", "three"]
-        self.numerical = ["reverb", "decibel", "bang"]
+        self.environment_settings = ["FVM", "FDM", "Huiqing"]
 
         self.file_button = pygame_gui.elements.UIButton(pg.Rect((0, 0), (100, 50)), 
                                                         text='File', 
@@ -28,29 +26,20 @@ class Toolbar:
                                                             self.environment_settings[0], 
                                                             pg.Rect((100, 0), (100, 50)), 
                                                             manager=self.manager)
-        self.graph_results_menu = pygame_gui.elements.UIDropDownMenu(self.graphs, 
-                                                            self.graphs[0], 
-                                                            pg.Rect((300, 0), (100, 50)), 
-                                                            manager=self.manager)
-        
-        self.numbers_result_menu = pygame_gui.elements.UIDropDownMenu(self.numerical, 
-                                                            self.numerical[0], 
-                                                            pg.Rect((400, 0), (100, 50)), 
-                                                            manager=self.manager)
         
         self.button_absorb_coeff = pygame_gui.elements.UIButton(pg.Rect((200, 0), (100, 50)), 
-                                                            text="Absorbtion coefficient",
+                                                            text="Materials",
                                                             manager=self.manager)
         
-        self.button_emitters = pygame_gui.elements.UIButton(pg.Rect((500, 0), (100, 50)), 
+        self.button_emitters = pygame_gui.elements.UIButton(pg.Rect((300, 0), (100, 50)), 
                                                             text ="Emitters",
                                                             manager=self.manager)
         
-        self.button_receivers = pygame_gui.elements.UIButton(pg.Rect((600, 0), (100, 50)), 
+        self.button_receivers = pygame_gui.elements.UIButton(pg.Rect((400, 0), (100, 50)), 
                                                         text='Receivers', 
                                                         manager=self.manager) 
         
-        self.button_calculate = pygame_gui.elements.UIButton(pg.Rect((700, 0), (100, 50)), 
+        self.button_calculate = pygame_gui.elements.UIButton(pg.Rect((500, 0), (100, 50)), 
                                                         text='Calculate', 
                                                         manager=self.manager) 
         
